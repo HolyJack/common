@@ -194,7 +194,10 @@ TablePrinter::AddJsonEntry(std::stringstream& table, size_t row_index)
   for (size_t i = 0; i < row.size(); i++) {
     table << "\"";
     for (size_t j = 0; j < headers[i].size(); j++) {
-      table << headers[i][j] << " ";
+      table << headers[i][j];
+      if (j + 1 < headers[i].size()) {
+        table << " ";
+      }
     }
     table << "\": \"";
 
