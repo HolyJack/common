@@ -71,7 +71,7 @@ class Logger {
       LEVEL_NAMES{"E", "W", "I", "D"};
 
   inline static const std::array<const char*, static_cast<uint8_t>(Level::kEND)>
-      LEVEL_FULL_NAMES{"Error", "Warning", "Info", "Debug"};
+      LEVEL_FULL_NAMES{"error", "warning", "info", "debug"};
 
   Logger();
 
@@ -298,7 +298,10 @@ class LogMessage {
           __FILE__, __LINE__, triton::common::Logger::Level::kINFO, nullptr, \
           false)                                                             \
               .stream()                                                      \
-          << TABLE.PrintTable();                                             \
+          << ((triton::common::gLogger_.LogFormat() ==                       \
+               triton::common::Logger::Format::kJSON)                        \
+                  ? TABLE.PrintJson()                                        \
+                  : TABLE.PrintTable());                                     \
   } while (false)
 
 #define LOG_TABLE_INFO(TABLE)                                                \
@@ -308,7 +311,10 @@ class LogMessage {
           __FILE__, __LINE__, triton::common::Logger::Level::kINFO, nullptr, \
           false)                                                             \
               .stream()                                                      \
-          << TABLE.PrintTable();                                             \
+          << ((triton::common::gLogger_.LogFormat() ==                       \
+               triton::common::Logger::Format::kJSON)                        \
+                  ? TABLE.PrintJson()                                        \
+                  : TABLE.PrintTable());                                     \
   } while (false)
 
 

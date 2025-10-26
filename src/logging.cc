@@ -152,8 +152,8 @@ LogMessage::LogPreamble(std::stringstream& stream)
       LogTimestamp(stream);
       stream << ", \"log_level\": \""
              << Logger::LEVEL_FULL_NAMES[static_cast<uint8_t>(level_)]
-             << "\", \"pid\" : \"" << pid_ << "\", \"path\" : \"" << path_
-             << ':' << line_ << "\", ";
+             << "\", \"pid\" : \"" << pid_ << "\", \"path\": \"" << path_
+             << "\", \"line\": \"" << line_ << "\", ";
       break;
     }
   }
@@ -175,7 +175,7 @@ LogMessage::~LogMessage()
   }
 
   if (gLogger_.LogFormat() == Logger::Format::kJSON) {
-    log_record << "\"message\": \"" << escaped_message << "\" }\"";
+    log_record << "\"message\": \"" << escaped_message << "\" }";
   } else {
     log_record << escaped_message;
   }
