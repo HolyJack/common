@@ -175,7 +175,7 @@ LogMessage::~LogMessage()
   }
 
   if (gLogger_.LogFormat() == Logger::Format::kJSON) {
-    log_record << "\"message\": \"" << escaped_message << "\" }";
+    log_record << "\"message\": " << escaped_message << " }";
   } else {
     log_record << escaped_message;
   }

@@ -189,22 +189,21 @@ TablePrinter::AddJsonEntry(std::stringstream& table, size_t row_index)
 {
   auto headers = data_[0];
   auto row = data_[row_index];
-  size_t max_height = max_heights_[row_index];
 
   table << "{";
   for (size_t i = 0; i < row.size(); i++) {
     table << "\"";
-    for (size_t j = 0; j < max_height; j++) {
-      table << headers[i][j];
+    for (size_t j = 0; j < headers[i].size(); j++) {
+      table << headers[i][j] << " ";
     }
     table << "\": \"";
 
-    for (size_t j = 0; j < max_height; j++) {
+    for (size_t j = 0; j < row[i].size(); j++) {
       table << row[i][j];
     }
     table << '"';
 
-    if (i + 1 < max_height) {
+    if (i + 1 < row.size()) {
       table << ", ";
     }
   }
@@ -248,19 +247,19 @@ TablePrinter::PrintTable()
 std::string
 TablePrinter::PrintJson()
 {
-  std::stringstream json_table;
-  json_table << "[";
+  std::stringstream table;
+  table << "[";
 
   for (size_t j = 1; j < data_.size(); j++) {
-    AddJsonEntry(json_table, j);
+    AddJsonEntry(table, j);
     if (j + 1 < data_.size()) {
-      json_table << ", ";
+      table << ", ";
     }
   }
 
-  json_table << "]";
+  table << "]";
 
-  return json_table.str();
+  return table.str();
 }
 
 // TablePrinter will take the ownership of `headers`.
