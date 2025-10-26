@@ -42,8 +42,8 @@ class TablePrinter {
 
   // Print the table
   std::string PrintTable();
-  // Print the table but in JSON format
-  std::string PrintJson();
+  // Print the table in JSON format
+  std::string PrintTableAsJson();
 
   // TablePrinter will take the ownership of `headers`.
   TablePrinter(const std::vector<std::string>& headers);
@@ -58,8 +58,12 @@ class TablePrinter {
   // occurs.
   void AddRow(std::stringstream& table, size_t row_index);
 
-  // Append a row to json list.
-  void AddJsonEntry(std::stringstream& table, size_t row_index);
+  // Append entry for the row to json table
+  void AddEntryAsJson(
+      std::stringstream& table, size_t row_index, size_t entry_index);
+
+  // Append a row to json table
+  void AddRowAsJson(std::stringstream& table, size_t row_index);
 
   // Add a row divider
   void AddRowDivider(std::stringstream& table);

@@ -148,12 +148,12 @@ LogMessage::LogPreamble(std::stringstream& stream)
       break;
     }
     case Logger::Format::kJSON: {
-      stream << "{ ";
+      stream << "{";
       LogTimestamp(stream);
       stream << ", \"log_level\": \""
              << Logger::LEVEL_FULL_NAMES[static_cast<uint8_t>(level_)]
-             << "\", \"pid\" : \"" << pid_ << "\", \"path\": \"" << path_
-             << "\", \"line\": \"" << line_ << "\", ";
+             << "\", \"pid\" : \"" << pid_ << "\", \"filename\": \"" << path_
+             << "\", \"lineno\": \"" << line_ << "\", ";
       break;
     }
   }
