@@ -56,13 +56,22 @@ namespace triton { namespace common {
 class Logger {
  public:
   // Log Formats.
-  enum class Format { kDEFAULT, kISO8601 };
+  enum class Format { kDEFAULT, kISO8601, kJSON };
 
   // Log levels.
-  enum class Level : uint8_t { kERROR = 0, kWARNING = 1, kINFO = 2, kEND };
+  enum class Level : uint8_t {
+    kERROR = 0,
+    kWARNING = 1,
+    kINFO = 2,
+    kDEBUG = 3,
+    kEND
+  };
 
   inline static const std::array<const char*, static_cast<uint8_t>(Level::kEND)>
-      LEVEL_NAMES{"E", "W", "I"};
+      LEVEL_NAMES{"E", "W", "I", "D"};
+
+  inline static const std::array<const char*, static_cast<uint8_t>(Level::kEND)>
+      LEVEL_FULL_NAMES{"error", "warning", "info", "debug"};
 
   Logger();
 
@@ -103,6 +112,8 @@ class Logger {
     switch (format_) {
       case Format::kISO8601:
         return "ISO8601";
+      case Format::kJSON:
+        return "JSON";
       case Format::kDEFAULT:
         return "default";
       default:
@@ -287,7 +298,10 @@ class LogMessage {
           __FILE__, __LINE__, triton::common::Logger::Level::kINFO, nullptr, \
           false)                                                             \
               .stream()                                                      \
-          << TABLE.PrintTable();                                             \
+          << ((triton::common::gLogger_.LogFormat() ==                       \
+               triton::common::Logger::Format::kJSON)                        \
+                  ? TABLE.PrintJson()                                        \
+                  : TABLE.PrintTable());                                     \
   } while (false)
 
 #define LOG_TABLE_INFO(TABLE)                                                \
@@ -297,7 +311,10 @@ class LogMessage {
           __FILE__, __LINE__, triton::common::Logger::Level::kINFO, nullptr, \
           false)                                                             \
               .stream()                                                      \
-          << TABLE.PrintTable();                                             \
+          << ((triton::common::gLogger_.LogFormat() ==                       \
+               triton::common::Logger::Format::kJSON)                        \
+                  ? TABLE.PrintJson()                                        \
+                  : TABLE.PrintTable());                                     \
   } while (false)
 
 

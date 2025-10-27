@@ -1,4 +1,4 @@
-// Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+// Copyright 2020, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -213,6 +213,65 @@ TablePrinter::PrintTable()
   }
 
   AddRowDivider(table);
+
+  return table.str();
+}
+
+void
+TablePrinter::AddEntryAsJson(
+    std::stringstream& table, size_t row_index, size_t entry_index)
+{
+  std::stringstream raw_entry;
+  auto entry = data_[row_index][entry_index];
+
+  for (size_t j = 0; j < entry.size(); j++) {
+    raw_entry << entry[j];
+  }
+
+  table << raw_entry.str();
+}
+
+
+void
+TablePrinter::AddRowAsJson(std::stringstream& table, size_t row_index)
+{
+  auto headers = data_[0];
+  auto row = data_[row_index];
+
+  table << '{';
+
+  for (size_t i = 0; i < row.size(); i++) {
+    table << '"';
+    for (size_t j = 0; j < headers[i].size(); j++) {
+      table << headers[i][j];
+    }
+    table << "\": ";
+
+    AddEntryAsJson(table, row_index, i);
+
+    if (i + 1 < row.size()) {
+      table << ", ";
+    }
+  }
+
+  table << '}';
+}
+
+
+std::string
+TablePrinter::PrintTableAsJson()
+{
+  std::stringstream table;
+  table << '[';
+
+  for (size_t j = 1; j < data_.size(); j++) {
+    AddRowAsJson(table, j);
+    if (j + 1 < data_.size()) {
+      table << ", ";
+    }
+  }
+
+  table << ']';
 
   return table.str();
 }
